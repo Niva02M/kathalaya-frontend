@@ -1,7 +1,7 @@
 ## KitabLaya
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
+KitabLaya is a space where writers share their stories, and readers find their next favorite tale. Express, inspire, and be heard.
 ## Getting Started
 
 First, run the development server:
