@@ -1,15 +1,33 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import axios from "@/lib/axios";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function RegisterPage() {
+  const router = useRouter();
+  const { user } = useAuth();
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const passwordRegex = /^(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}$/;
+  function validatePassword(password: string) {
+    if (!passwordRegex.test(password)) {
+      return "Password must be at least 8 characters long, contain at least one number, and one special character.";
+    }
+    return null;
+  }
+  useEffect(() => {
+    if (user) {
+      router.push("/");
+    }
+  }, [user, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,23 +43,29 @@ export default function RegisterPage() {
       return;
     }
 
+    const passwordError = validatePassword(password);
+    if (passwordError) {
+      setError(passwordError);
+      return;
+    }
+
     setLoading(true);
     try {
-      // Call your register API here
-      // Example:
-      /*
-      const res = await fetch("/api/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, username, password }),
+      const res = await axios.post("/register", {
+        email,
+        username,
+        password,
       });
-      if (!res.ok) throw new Error("Registration failed");
-      */
+      const data = res.data;
 
-      // Simulate success for demo
-      alert("Registered successfully!");
-    } catch (err: any) {
-      setError(err.message || "Something went wrong");
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
+      toast.success("Registered successfully!");
+      router.push("/login");
+    } catch (error: any) {
+      toast.error(error.message || "Registration Failed");
     } finally {
       setLoading(false);
     }

@@ -1,14 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import Link from "next/link";
+import axios from "@/lib/axios";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function LoginPage() {
+  const { user } = useAuth();
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const { setUser } = useAuth(); // get setUser from context
 
+  useEffect(() => {
+    if (user) {
+      router.push("/");
+    }
+  }, [user, router]);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -20,21 +32,20 @@ export default function LoginPage() {
 
     setLoading(true);
     try {
-      // Call your login API here
-      // Example:
-      /*
-      const res = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+      const res = await axios.post("/login", {
+        identifier: email,
+        password,
       });
-      if (!res.ok) throw new Error("Invalid credentials");
-      */
-
-      // Simulate success for demo
-      alert("Logged in!");
-    } catch (err: any) {
-      setError(err.message || "Something went wrong");
+      const data = res.data;
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      localStorage.setItem("user", JSON.stringify(data.user));
+      setUser(data.user);
+      toast.success("Logged in successfully!");
+      router.push("/");
+    } catch (error: any) {
+      toast.error(error.message || "Login Failed");
     } finally {
       setLoading(false);
     }
