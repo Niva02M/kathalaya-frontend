@@ -33,9 +33,7 @@ export default function Page() {
                 <br />
                 <span className="text-yellow-400">Mindful Reading</span>
               </h1>
-              <p className="text-gray-300 text-lg mb-2">
-                By Thrift Kitab Collection
-              </p>
+              <p className="text-gray-300 text-lg mb-2">By Author 1</p>
 
               {/* Rating */}
               <div className="flex items-center space-x-4 mb-6">
