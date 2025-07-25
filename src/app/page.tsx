@@ -1,17 +1,13 @@
-import { Footer } from "@/components/footer";
-import { Header } from "@/components/header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Star, Play, Info, ChevronRight } from "lucide-react";
 import Image from "next/image";
-import bookstore from "@/assets/bookstore.jpg";
-import book1 from "@/assets/book1.jpeg";
+import bookstore from "@/public/assets/bookstore.jpg";
+import book1 from "@/public/assets/book1.jpeg";
 
 export default function Page() {
   return (
     <div className="min-h-screen bg-black text-white">
-      <Header />
-
       <section className="relative min-h-screen flex items-center">
         <div className="absolute inset-0 z-0">
           <div className="w-full h-full bg-gradient-to-r from-black via-black/80 to-transparent">
@@ -236,8 +232,6 @@ export default function Page() {
           </div>
         </div>
       </section>
-
-      <Footer />
     </div>
   );
 }

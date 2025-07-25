@@ -1,5 +1,5 @@
 import { Facebook, Twitter, Instagram, Youtube } from "lucide-react";
-import bookstore from "../assets/bookstore.jpg";
+import bookstore from "@/public/assets/bookstore.jpg";
 import Image from "next/image";
 
 export function Footer() {
