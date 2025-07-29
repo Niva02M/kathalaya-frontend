@@ -65,12 +65,26 @@ export default function UserProfilePage() {
       body: form,
     });
 
-    const data = await res.json();
+    let data;
+    try {
+      data = await res.json();
+    } catch (err) {
+      toast.error("Failed to parse server response.");
+      return;
+    }
+
+    if (!res.ok) {
+      toast.error(data?.error || "Avatar upload failed");
+      return;
+    }
+
     if (data.url) {
-      setUser((u: any) => ({ ...u, avatar: data.url }));
+      setUser((u: any) => {
+        const updatedUser = { ...u, avatar: data.url };
+        localStorage.setItem("user", JSON.stringify(updatedUser));
+        return updatedUser;
+      });
       toast.success("Avatar uploaded");
-    } else {
-      toast.error("Avatar upload failed");
     }
   };
 
@@ -84,7 +98,6 @@ export default function UserProfilePage() {
   return (
     <div className="min-h-screen py-20 px-8 bg-black text-white">
       <div className="max-w-6xl mx-auto flex gap-8">
-        {/* LEFT - Profile Info */}
         <div className="w-1/3    p-6 rounded-lg shadow-lg space-y-6">
           <div className="flex flex-col items-center gap-4">
             <img
@@ -93,12 +106,15 @@ export default function UserProfilePage() {
               alt="Avatar"
             />
 
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleAvatarUpload}
-              className="text-sm"
-            />
+            <label className="bg-white text-black text-sm px-4 py-1 rounded cursor-pointer hover:bg-black hover:text-white transition">
+              {user.avatar ? "Change Avatar" : "Upload Avatar"}
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleAvatarUpload}
+                className="hidden"
+              />
+            </label>
           </div>
 
           <div className="space-y-4">

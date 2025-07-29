@@ -14,7 +14,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const { setUser } = useAuth(); // get setUser from context
+  const { setUser } = useAuth();
 
   useEffect(() => {
     if (user) {
@@ -36,16 +36,19 @@ export default function LoginPage() {
         identifier: email,
         password,
       });
+
       const data = res.data;
-      if (data.error) {
-        throw new Error(data.error);
+
+      if (!data || !data.user) {
+        throw new Error(data?.error ?? "Invalid login response.");
       }
+
       localStorage.setItem("user", JSON.stringify(data.user));
       setUser(data.user);
       toast.success("Logged in successfully!");
       router.push("/");
     } catch (error: any) {
-      toast.error(error.message || "Login Failed");
+      toast.error(error.response?.data?.error || "Login failed.");
     } finally {
       setLoading(false);
     }
