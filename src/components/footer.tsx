@@ -1,5 +1,5 @@
 import bookstore from "@/public/assets/bookstore.jpg";
-import Image from "next/image";
+import Image from "next/legacy/image";
 
 export function Footer() {
   return (

@@ -1,17 +1,27 @@
+// lib/mongodb.ts
 import { MongoClient } from "mongodb";
-
-declare global {
-  // eslint-disable-next-line no-var
-  var mongoClient: MongoClient | undefined;
-}
 
 const uri = process.env.MONGODB_URI!;
 const options = {};
 
-if (!global.mongoClient) {
-  global.mongoClient = new MongoClient(uri, options);
+let client: MongoClient;
+let clientPromise: Promise<MongoClient>;
+
+if (!process.env.MONGODB_URI) {
+  throw new Error("Please add your Mongo URI to .env.local");
 }
 
-const client = global.mongoClient;
+if (process.env.NODE_ENV === "development") {
+  // In dev mode, reuse the client across hot reloads
+  if (!(global as any)._mongoClientPromise) {
+    client = new MongoClient(uri, options);
+    (global as any)._mongoClientPromise = client.connect();
+  }
+  clientPromise = (global as any)._mongoClientPromise;
+} else {
+  // In production, always create a new client
+  client = new MongoClient(uri, options);
+  clientPromise = client.connect();
+}
 
-export default client;
+export default clientPromise;

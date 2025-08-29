@@ -166,7 +166,7 @@ export function Header() {
               ) : (
                 <Link href="/login">
                   <Button className="bg-yellow-400 hover:bg-yellow-500 text-black px-4 py-2 rounded-full text-sm font-semibold">
-                    Sign Up
+                    Sign In
                   </Button>
                 </Link>
               )}

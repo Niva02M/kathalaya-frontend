@@ -1,27 +1,30 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Star, Play, Info, ChevronRight } from "lucide-react";
-import Image from "next/image";
+import { Star, Play, Info } from "lucide-react";
+import Image from "next/legacy/image";
 import bookstore from "@/public/assets/bookstore.jpg";
 import book1 from "@/public/assets/book1.jpeg";
+import BooksSection from "@/components/home/books-section";
+import TrendsSection from "@/components/home/trends-section";
 
 export default function Page() {
   return (
     <div className="min-h-screen bg-black text-white">
-      <section className="relative min-h-screen flex items-center">
+      <section className="relative min-h-screen flex items-center z-0">
         <div className="absolute inset-0 z-0">
-          <div className="w-full h-full bg-gradient-to-r from-black via-black/80 to-transparent">
+          <div className="absolute inset-0 z-[-1]">
             <Image
               src={bookstore}
+              layout="fill"
               alt="Library background"
-              fill
-              className="object-cover opacity-40"
+              className="object-cover "
+              priority
             />
+            <div className="absolute h-full inset-0 bg-gradient-to-r from-black via-black/80 to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/70 to-black"></div>
           </div>
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mt-24">
-          {/* Left Content */}
           <div className="space-y-8">
             <div>
               <h1 className="text-5xl lg:text-7xl font-bold mb-4 leading-tight">
@@ -75,163 +78,17 @@ export default function Page() {
                 <Image
                   src={book1}
                   alt="Featured Book"
-                  fill
                   className="object-cover "
                 />
               </div>
 
-              {/* Caption below the image box */}
               <p className="text-sm text-gray-200 mt-4">Featured Book</p>
             </div>
           </div>
         </div>
       </section>
-
-      {/* Trends Section */}
-      <section className="py-16 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-3xl font-bold">Trends</h2>
-            <button className="text-yellow-400 hover:text-yellow-300 flex items-center space-x-2">
-              <span>See more</span>
-              <ChevronRight className="h-4 w-4" />
-            </button>
-          </div>
-
-          <div className="flex space-x-6 overflow-x-auto pb-4">
-            {[
-              {
-                title: "Meditation Mastery",
-                author: "Various Authors",
-                rating: 4.6,
-                category: "MEDITATIONS",
-              },
-              {
-                title: "Soul & Spirit",
-                author: "Deepak Chopra",
-                rating: 4.8,
-                category: "SPIRITUALITY",
-              },
-              {
-                title: "Legendary Tales",
-                author: "Joseph Campbell",
-                rating: 4.9,
-                category: "MYTHOLOGY",
-              },
-              {
-                title: "My First Love",
-                author: "Nicholas Sparks",
-                rating: 4.3,
-                category: "ROMANCE",
-              },
-              {
-                title: "Mindful Living",
-                author: "Thich Nhat Hanh",
-                rating: 4.7,
-                category: "PHILOSOPHY",
-              },
-            ].map((book, index) => (
-              <Card
-                key={index}
-                className="bg-gray-900 border-gray-800 min-w-[200px] hover:bg-gray-800 transition-colors cursor-pointer"
-              >
-                <CardContent className="p-4">
-                  <div className="w-full h-48 bg-gradient-to-br from-gray-700 to-gray-800 rounded-lg mb-4 flex items-center justify-center">
-                    <div className="w-24 h-32 bg-gray-600 rounded"></div>
-                  </div>
-                  <div className="text-xs text-yellow-400 mb-2 font-semibold">
-                    {book.category}
-                  </div>
-                  <h3 className="font-bold text-white mb-1 text-sm">
-                    {book.title}
-                  </h3>
-                  <p className="text-gray-400 text-xs mb-2">{book.author}</p>
-                  <div className="flex items-center space-x-1">
-                    <div className="flex">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`h-3 w-3 ${
-                            i < Math.floor(book.rating)
-                              ? "text-yellow-400 fill-current"
-                              : "text-gray-600"
-                          }`}
-                        />
-                      ))}
-                    </div>
-                    <span className="text-yellow-400 text-xs ml-1">
-                      {book.rating}
-                    </span>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Books Section */}
-      <section className="py-16 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-3xl font-bold">Books</h2>
-            <button className="text-yellow-400 hover:text-yellow-300 flex items-center space-x-2">
-              <span>See more</span>
-              <ChevronRight className="h-4 w-4" />
-            </button>
-          </div>
-
-          {/* Category Tabs */}
-          <div className="flex space-x-8 mb-8 overflow-x-auto">
-            {[
-              "All",
-              "Romance",
-              "Literature",
-              "Fiction",
-              "Thriller",
-              "Biographies",
-            ].map((category, index) => (
-              <button
-                key={category}
-                className={`whitespace-nowrap pb-2 border-b-2 transition-colors ${
-                  index === 0
-                    ? "border-yellow-400 text-yellow-400"
-                    : "border-transparent text-gray-400 hover:text-white"
-                }`}
-              >
-                {category}
-              </button>
-            ))}
-          </div>
-
-          {/* Books Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-            {[
-              { title: "Loving Adventure", author: "Sarah Johnson" },
-              { title: "Soul Spirit", author: "Marcus Webb" },
-              { title: "Look Inside", author: "David Ellis" },
-              { title: "Ocean Waves", author: "Lisa Chen" },
-              { title: "Mountain High", author: "Alex Rivera" },
-              { title: "City Lights", author: "Emma Stone" },
-            ].map((book, index) => (
-              <Card
-                key={index}
-                className="bg-gray-900 border-gray-800 hover:bg-gray-800 transition-colors cursor-pointer"
-              >
-                <CardContent className="p-4">
-                  <div className="w-full h-40 bg-gradient-to-br from-gray-700 to-gray-800 rounded-lg mb-4 flex items-center justify-center">
-                    <div className="w-16 h-24 bg-gray-600 rounded"></div>
-                  </div>
-                  <h3 className="font-bold text-white mb-1 text-sm">
-                    {book.title}
-                  </h3>
-                  <p className="text-gray-400 text-xs">{book.author}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
+      <TrendsSection />
+      <BooksSection />
     </div>
   );
 }
