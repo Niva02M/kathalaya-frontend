@@ -88,7 +88,7 @@ export default function UserProfilePage() {
     }
   };
 
-  if (!user) return <div className="p-6 text-white">Loading...</div>;
+  if (!user) return <div className='p-6 text-white'>Loading...</div>;
   const handleLogout = () => {
     localStorage.removeItem("user");
     window.location.href = "/";
@@ -96,75 +96,71 @@ export default function UserProfilePage() {
   };
 
   return (
-    <div className="min-h-screen py-20 px-8 bg-black text-white">
-      <div className="max-w-6xl mx-auto flex gap-8">
-        <div className="w-1/3    p-6 rounded-lg shadow-lg space-y-6">
-          <div className="flex flex-col items-center gap-4">
+    <div className='min-h-screen py-40 px-8 bg-black text-white'>
+      <div className='max-w-6xl mx-auto flex gap-8'>
+        <div className='w-1/3    p-6 rounded-lg shadow-lg space-y-6'>
+          <div className='flex flex-col items-center gap-4'>
             <img
               src={user.avatar || "/default-avatar.png"}
-              className="w-24 h-24 rounded-full object-cover border border-gray-500"
-              alt="Avatar"
+              className='w-24 h-24 rounded-full object-cover border border-gray-500'
+              alt='Avatar'
             />
 
-            <label className="bg-white text-black text-sm px-4 py-1 rounded cursor-pointer hover:bg-black hover:text-white transition">
+            <label className='bg-white text-black text-sm px-4 py-1 rounded cursor-pointer hover:bg-black hover:text-white transition'>
               {user.avatar ? "Change Avatar" : "Upload Avatar"}
               <input
-                type="file"
-                accept="image/*"
+                type='file'
+                accept='image/*'
                 onChange={handleAvatarUpload}
-                className="hidden"
+                className='hidden'
               />
             </label>
           </div>
 
-          <div className="space-y-4">
+          <div className='space-y-4'>
             <div>
-              <label className="text-gray-400 text-sm">Email</label>
+              <label className='text-gray-400 text-sm'>Email</label>
               <input
                 disabled
                 value={user.email}
-                className="w-full p-2 bg-gray-800/20 rounded border border-gray-600"
+                className='w-full p-2 bg-gray-800/20 rounded border border-gray-600'
               />
             </div>
             <div>
-              <label className="text-gray-400 text-sm">Username</label>
+              <label className='text-gray-400 text-sm'>Username</label>
               <input
                 disabled
                 value={user.username}
-                className="w-full p-2 bg-gray-800/20 rounded border border-gray-600"
+                className='w-full p-2 bg-gray-800/20 rounded border border-gray-600'
               />
             </div>
             <div>
-              <label className="text-gray-400 text-sm">Name</label>
+              <label className='text-gray-400 text-sm'>Name</label>
               <input
                 value={formData.name}
-                onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
-                }
-                placeholder="Name"
-                className="w-full p-2 bg-gray-800/20 rounded border border-gray-600"
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                placeholder='Name'
+                className='w-full p-2 bg-gray-800/20 rounded border border-gray-600'
               />
             </div>
             <div>
-              <label className="text-gray-400 text-sm">Description</label>
+              <label className='text-gray-400 text-sm'>Description</label>
               <textarea
                 value={formData.description}
-                onChange={(e) =>
-                  setFormData({ ...formData, description: e.target.value })
-                }
-                placeholder="Describe yourself"
-                className="w-full p-2 bg-gray-800/20 rounded border border-gray-600"
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                placeholder='Describe yourself'
+                className='w-full p-2 bg-gray-800/20 rounded border border-gray-600'
               />
             </div>
             <button
               onClick={handleUpdate}
-              className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-2 w-full rounded"
+              className='bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-2 w-full rounded'
             >
               Save Changes
             </button>
             <button
               onClick={() => setShowLogoutModal(true)}
-              className="mt-4 bg-red-600 hover:bg-red-700 p-2 rounded w-full font-semibold text-white"
+              className='mt-4 bg-red-600 hover:bg-red-700 p-2 rounded w-full font-semibold text-white'
             >
               Logout
             </button>
@@ -172,9 +168,9 @@ export default function UserProfilePage() {
         </div>
 
         {/* RIGHT - Tabs */}
-        <div className="w-2/3">
+        <div className='w-2/3'>
           {/* Tabs */}
-          <div className="flex space-x-4 border-b border-gray-700 mb-6">
+          <div className='flex space-x-4 border-b border-gray-700 mb-6'>
             {TABS.map((tab) => (
               <button
                 key={tab}
@@ -194,17 +190,17 @@ export default function UserProfilePage() {
           {/* Tab Content */}
           <div>
             {activeTab === "Stories" && (
-              <div className="space-y-2 text-gray-300">
+              <div className='space-y-2 text-gray-300'>
                 <p>Here are your published stories. (Coming soon)</p>
               </div>
             )}
             {activeTab === "Reading List" && (
-              <div className="space-y-2 text-gray-300">
+              <div className='space-y-2 text-gray-300'>
                 <p>Your saved/liked stories will appear here. (Coming soon)</p>
               </div>
             )}
             {activeTab === "Followers" && (
-              <div className="space-y-2 text-gray-300">
+              <div className='space-y-2 text-gray-300'>
                 <p>These people follow you. (Coming soon)</p>
               </div>
             )}
@@ -212,20 +208,20 @@ export default function UserProfilePage() {
         </div>
       </div>
       {showLogoutModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-black/80 rounded-lg p-6 max-w-sm w-full text-white shadow-lg">
-            <h2 className="text-lg font-semibold mb-4">Confirm Logout</h2>
-            <p className="mb-6">Do you want to logout?</p>
-            <div className="flex justify-end space-x-4">
+        <div className='fixed inset-0 bg-black/50 flex items-center justify-center z-50'>
+          <div className='bg-black/80 rounded-lg p-6 max-w-sm w-full text-white shadow-lg'>
+            <h2 className='text-lg font-semibold mb-4'>Confirm Logout</h2>
+            <p className='mb-6'>Do you want to logout?</p>
+            <div className='flex justify-end space-x-4'>
               <button
                 onClick={() => setShowLogoutModal(false)}
-                className="px-4 py-2 rounded bg-gray-700 hover:bg-gray-600"
+                className='px-4 py-2 rounded bg-gray-700 hover:bg-gray-600'
               >
                 Cancel
               </button>
               <button
                 onClick={handleLogout}
-                className="px-4 py-2 rounded bg-red-600 hover:bg-red-700"
+                className='px-4 py-2 rounded bg-red-600 hover:bg-red-700'
               >
                 Logout
               </button>

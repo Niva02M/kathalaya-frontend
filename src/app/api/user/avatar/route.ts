@@ -1,8 +1,13 @@
 // app/api/user/avatar/route.ts
-import { writeFile } from "fs/promises";
-import path from "path";
 import { NextRequest, NextResponse } from "next/server";
+import { v2 as cloudinary } from "cloudinary";
 import clientPromise from "@/lib/mongodb";
+
+cloudinary.config({
+  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 export async function POST(req: NextRequest) {
   try {
@@ -11,29 +16,30 @@ export async function POST(req: NextRequest) {
     const file = formData.get("avatar") as File;
 
     if (!email || !file) {
-      return NextResponse.json(
-        { error: "Email and avatar required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Email and avatar required" }, { status: 400 });
     }
 
+    // Convert file to buffer then to base64
     const buffer = Buffer.from(await file.arrayBuffer());
-    const filename = `${Date.now()}-${file.name}`;
-    const filepath = path.join(process.cwd(), "public", "uploads", filename);
-    await writeFile(filepath, buffer);
+    const base64 = buffer.toString("base64");
+    const dataURI = `data:${file.type};base64,${base64}`;
 
+    // Upload to Cloudinary
+    const uploadResponse = await cloudinary.uploader.upload(dataURI, {
+      folder: "kathalaya/avatars",
+      transformation: [{ width: 400, height: 400, crop: "fill", gravity: "face" }],
+    });
+
+    // Update MongoDB
     const client = await clientPromise;
     const db = client.db("kathalaya");
     await db
       .collection("users")
-      .updateOne({ email }, { $set: { avatar: `/uploads/${filename}` } });
+      .updateOne({ email }, { $set: { avatar: uploadResponse.secure_url } });
 
-    return NextResponse.json({ url: `/uploads/${filename}` });
+    return NextResponse.json({ url: uploadResponse.secure_url });
   } catch (err) {
     console.error("Avatar upload error:", err);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
