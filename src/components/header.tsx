@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
+import StoriesDropdown from "./StoriesDropdown";
 
 export function Header() {
   const [isVisible, setIsVisible] = useState(true);
@@ -31,29 +32,6 @@ export function Header() {
 
   const shouldShowHeader = isVisible || isHovering || scrollY < 100;
 
-  const genres = [
-    "Romance",
-    "Mystery",
-    "Thriller",
-    "Fantasy",
-    "Adventure",
-    "Historical",
-    "Sci-Fi",
-    "Drama",
-    "Non-Fiction",
-    "Children's",
-    "Young Adult",
-    "Horror",
-    "Comedy",
-    "Poetry",
-    "Self-Help",
-  ];
-
-  const authors = ["Author A", "Author B", "Author C", "Author D", "Author E"];
-  const splitIndex = Math.floor(genres.length / 2);
-  const firstHalf = genres.slice(0, splitIndex);
-  const secondHalf = genres.slice(splitIndex);
-
   return (
     <>
       <div
@@ -79,56 +57,7 @@ export function Header() {
                 KATHA/LAYA
               </Link>
               <nav className='hidden md:flex items-center space-x-8 relative'>
-                <div className='relative group'>
-                  <span className='text-gray-300 hover:text-white transition-colors cursor-default'>
-                    Stories
-                  </span>
-                  <div className='absolute left-0 mt-4 w-[600px] bg-black rounded-lg shadow-xl opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-300 z-[200]'>
-                    <div className='grid grid-cols-3 gap-6 p-6'>
-                      <div>
-                        <h4 className='text-yellow-200 font-semibold mb-2'>Genres</h4>
-                        <ul className='space-y-1 text-sm text-gray-100'>
-                          {firstHalf.map((genre) => (
-                            <li key={genre}>
-                              <a
-                                href={`/storylist?genre=${encodeURIComponent(genre.toLowerCase())}`}
-                                className='hover:underline'
-                              >
-                                {genre}
-                              </a>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                      <div className='pt-6 md:pt-0'>
-                        <ul className='space-y-1 text-sm text-gray-100'>
-                          {secondHalf.map((genre) => (
-                            <li key={genre}>
-                              <a
-                                href={`/storylist?genre=${encodeURIComponent(genre.toLowerCase())}`}
-                                className='hover:underline'
-                              >
-                                {genre}
-                              </a>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                      <div>
-                        <h4 className='text-yellow-200 font-semibold mb-2'>Popular Authors</h4>
-                        <ul className='space-y-1 text-sm text-gray-100'>
-                          {authors.map((author) => (
-                            <li key={author}>
-                              <a href='#' className='hover:underline'>
-                                {author}
-                              </a>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <StoriesDropdown />
               </nav>
             </div>
 

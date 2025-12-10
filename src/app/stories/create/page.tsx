@@ -3,14 +3,15 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Image as ImageIcon, Plus } from "lucide-react";
+import toast from "react-hot-toast";
 
 export default function CreateStoryPage() {
   const [user, setUser] = useState<any>(null);
-
   const [title, setTitle] = useState("");
   const [coverUrl, setCoverUrl] = useState("");
   const [tags, setTags] = useState("");
   const [chapters, setChapters] = useState([{ chapterNumber: 1, title: "", content: "" }]);
+
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (!storedUser) {
@@ -19,40 +20,75 @@ export default function CreateStoryPage() {
     }
     setUser(JSON.parse(storedUser));
   }, []);
+
   const handleAddChapter = () => {
-    setChapters([...chapters, { chapterNumber: chapters.length + 1, title: "", content: "" }]);
+    setChapters((prev) => [...prev, { chapterNumber: prev.length + 1, title: "", content: "" }]);
+  };
+
+  const handleChapterChange = (index: number, field: "title" | "content", value: string) => {
+    setChapters((prev) => prev.map((ch, idx) => (idx === index ? { ...ch, [field]: value } : ch)));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!user) return;
 
     const body = {
       title,
       coverUrl,
-      authorId: user.id, // get from stored user
-      authorName: user.name, // get from stored user
-      tags: tags.split(",").map((t) => t.trim()),
+      authorId: user.id,
+      authorName: user.name,
+      tags: tags
+        .split(",")
+        .map((t) => t.trim())
+        .filter(Boolean),
       chapters,
     };
 
-    const res = await fetch("/api/create-story", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
+    try {
+      const res = await fetch("/api/create-story", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
 
-    const data = await res.json();
-    console.log("Received body:", data);
+      const data = await res.json();
 
-    if (data.success) {
-      alert("Story created! ID: " + data.storyId);
-    } else {
-      alert("Error: " + data.error);
+      if (data.success) {
+        toast.success("Story uploaded successfully!");
+
+        setTitle("");
+        setCoverUrl("");
+        setTags("");
+        setChapters([{ chapterNumber: 1, title: "", content: "" }]);
+      } else {
+        toast.error("Story upload failed!. Try again.");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Internal Error occurred. Try again.");
+    }
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const res = await fetch("/api/upload", { method: "POST", body: formData });
+      const data = await res.json();
+      if (data.url) setCoverUrl(data.url);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to upload image");
     }
   };
 
   return (
-    <div className='min-h-screen bg-black text-white p-36  '>
+    <div className='min-h-screen text-white p-36 max-w-5xl mx-auto'>
       <h1 className='text-4xl font-bold mb-8 text-yellow-400'>Create a New Story</h1>
       <form onSubmit={handleSubmit} className='flex flex-col gap-6'>
         <input
@@ -71,25 +107,9 @@ export default function CreateStoryPage() {
           <input
             type='file'
             accept='image/*'
-            onChange={async (e) => {
-              const file = e.target.files?.[0];
-              if (!file) return;
-
-              // Create FormData to send to your API
-              const formData = new FormData();
-              formData.append("file", file);
-
-              // Upload to your API endpoint
-              const res = await fetch("/api/upload", {
-                method: "POST",
-                body: formData,
-              });
-              const data = await res.json();
-              if (data.url) setCoverUrl(data.url);
-            }}
+            onChange={handleFileChange}
             className='p-2 rounded-lg bg-gray-800 text-white'
           />
-
           {coverUrl && (
             <img
               src={coverUrl}
@@ -115,11 +135,7 @@ export default function CreateStoryPage() {
                 type='text'
                 placeholder='Chapter Title'
                 value={ch.title}
-                onChange={(e) => {
-                  const newCh = [...chapters];
-                  newCh[idx].title = e.target.value;
-                  setChapters(newCh);
-                }}
+                onChange={(e) => handleChapterChange(idx, "title", e.target.value)}
                 className='p-2 rounded-lg bg-gray-800 text-white'
                 required
               />
@@ -127,16 +143,13 @@ export default function CreateStoryPage() {
                 rows={6}
                 placeholder='Chapter Content'
                 value={ch.content}
-                onChange={(e) => {
-                  const newCh = [...chapters];
-                  newCh[idx].content = e.target.value;
-                  setChapters(newCh);
-                }}
+                onChange={(e) => handleChapterChange(idx, "content", e.target.value)}
                 className='p-2 rounded-lg bg-gray-800 text-white'
                 required
               />
             </div>
           ))}
+
           <Button
             type='button'
             onClick={handleAddChapter}
