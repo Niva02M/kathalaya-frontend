@@ -63,7 +63,7 @@ export function Footer() {
           <p>
             Developed by{" "}
             <a
-              href='https://nivamaharjan001.com'
+              href='https://nivamaharjan001.com.np'
               target='_blank'
               rel='noopener noreferrer'
               className='text-yellow-400 hover:underline'
