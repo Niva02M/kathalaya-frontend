@@ -28,7 +28,7 @@ export function Footer() {
           </p>
         </div>
 
-        <div className='flex gap-6 flex-wrap justify-center text-sm mb-8'>
+        {/* <div className='flex gap-6 flex-wrap justify-center text-sm mb-8'>
           <a href='#' className='hover:text-white transition-colors'>
             All Stories
           </a>
@@ -41,11 +41,11 @@ export function Footer() {
           <a href='#' className='hover:text-white transition-colors'>
             Genres
           </a>
-        </div>
+        </div> */}
 
         {/* Copyright */}
         <div className='border-t border-gray-800 pt-4 text-center text-sm'>
-          <div className='flex gap-6 mb-4 flex-wrap justify-center'>
+          {/* <div className='flex gap-6 mb-4 flex-wrap justify-center'>
             <a href='#' className='hover:text-white transition-colors'>
               Contact Us
             </a>
@@ -58,8 +58,20 @@ export function Footer() {
             <a href='#' className='hover:text-white transition-colors'>
               Terms of Use
             </a>
-          </div>
-          <p>© 2025 Kathalaya. All rights reserved.</p>
+          </div> */}
+          <p className='mb-2'>© 2025 Kathalaya. All rights reserved.</p>
+          <p>
+            Developed by{" "}
+            <a
+              href='https://nivamaharjan001.com'
+              target='_blank'
+              rel='noopener noreferrer'
+              className='text-yellow-400 hover:underline'
+            >
+              Niva Maharjan
+            </a>
+            .
+          </p>
         </div>
       </div>
     </footer>

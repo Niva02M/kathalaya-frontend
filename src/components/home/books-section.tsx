@@ -27,7 +27,7 @@ export default function BooksSection() {
   const visibleStories = stories.slice(0, 5);
 
   return (
-    <div className='min-h-screen py-16 px-6'>
+    <div className='min-h-screen py-16 px-6 max-w-7xl mx-auto'>
       <div className='flex items-center justify-between mb-6'>
         <h2 className='text-3xl font-bold'>Books</h2>
         <Link

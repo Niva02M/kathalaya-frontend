@@ -25,16 +25,14 @@ export default function StoriesGrid({ stories, loading }: StoriesGridProps) {
   const searchParams = useSearchParams();
   const tagParam = searchParams.get("tag") || "all";
 
-  // Capitalize first letter
   const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
 
   const categories = useMemo(() => {
     const allTags = stories.flatMap((story) => story.tags || []);
-    const uniqueTags = Array.from(new Set(allTags.map((t) => t.toLowerCase()))); // lowercase for consistency
-    return ["all", ...uniqueTags].map(capitalize); // display capitalized
+    const uniqueTags = Array.from(new Set(allTags.map((t) => t.toLowerCase())));
+    return ["all", ...uniqueTags].map(capitalize);
   }, [stories]);
 
-  // Find selected category in display format
   const selectedCategory =
     categories.find((c) => c.toLowerCase() === tagParam.toLowerCase()) || "All";
 
@@ -68,28 +66,35 @@ export default function StoriesGrid({ stories, loading }: StoriesGridProps) {
         ))}
       </div>
 
-      {/* Stories Grid */}
       <div className='grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6'>
         {filteredStories.map((story) => (
           <Link key={story._id} href={`/stories/${story.slug}`}>
-            <Card className='bg-gray-900 border-gray-800 hover:bg-gray-800 cursor-pointer transition-colors'>
-              <CardContent className='p-4'>
-                <div className='w-full h-40 relative rounded-lg mb-4 overflow-hidden bg-gray-800'>
+            <Card className='relativerounded-xl overflow-hidden shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 cursor-pointer group bg-transparent border-0'>
+              <CardContent className='p-0'>
+                <div className='w-full h-70 relative'>
                   {story.coverUrl ? (
                     <img
                       src={story.coverUrl}
                       alt={story.title}
-                      className='w-full h-full object-cover'
+                      className='w-full h-full object-cover rounded-xl'
                     />
                   ) : (
-                    <div className='w-full h-full flex items-center justify-center'>
-                      <BookOpen className='h-12 w-12 text-gray-600' />
+                    <div className='w-full h-48 flex items-center justify-center bg-gray-700 rounded-lg'>
+                      <BookOpen className='h-12 w-12 text-gray-400' />
                     </div>
                   )}
+
+                  <div className='absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/70 to-transparent p-3'>
+                    <h3 className='text-white font-semibold text-sm line-clamp-2'>{story.title}</h3>
+                  </div>
+                  <div className='absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-center items-center text-center p-4 rounded-lg'>
+                    <h3 className='text-white font-bold text-base mb-2'>{story.title}</h3>
+                    <p className='text-gray-300 text-sm'>{story.authorName}</p>
+                    <p className='text-gray-400 text-xs mt-1'>
+                      {story.chapters?.length || 0} chapters
+                    </p>
+                  </div>
                 </div>
-                <h3 className='text-white font-bold mb-1 text-sm line-clamp-2'>{story.title}</h3>
-                <p className='text-gray-400 text-xs'>{story.authorName}</p>
-                <p className='text-gray-500 text-xs mt-1'>{story.chapters?.length || 0} chapters</p>
               </CardContent>
             </Card>
           </Link>
