@@ -4,8 +4,8 @@ import { MongoClient } from "mongodb";
 const MONGODB_URI = process.env.MONGODB_URI || "";
 const DB_NAME = process.env.DB_NAME || "";
 
-export async function GET(req: NextRequest, context: any) {
-  const slug = context.params.slug as string;
+export async function GET(req: NextRequest, context: { params: Promise<{ slug: string }> }) {
+  const { slug } = await context.params;
   let client;
 
   try {
