@@ -1,5 +1,5 @@
-// src/app/stories/[slug]/chapter/[chapter]/page.tsx
 import ChapterReader from "@/components/stories/ChapterReader";
+import { JSX } from "react";
 
 async function getStory(slug: string) {
   const base = process.env.NEXT_PUBLIC_BASE_URL;
@@ -8,12 +8,17 @@ async function getStory(slug: string) {
   return res.json();
 }
 
-export default async function ChapterPage({
-  params,
-}: {
-  params: { slug: string; chapter: string };
-}) {
-  const { slug, chapter } = params;
+interface ChapterPageProps {
+  params: Promise<{
+    slug: string;
+    chapter: string;
+  }>;
+}
+
+export default async function ChapterPage({ params }: ChapterPageProps): Promise<JSX.Element> {
+  // Await the params promise
+  const { slug, chapter } = await params;
+
   const data = await getStory(slug);
 
   if (!data.success) return <div>Story not found</div>;

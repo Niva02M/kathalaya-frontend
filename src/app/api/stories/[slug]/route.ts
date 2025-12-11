@@ -1,12 +1,11 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
 
 const MONGODB_URI = process.env.MONGODB_URI || "";
 const DB_NAME = process.env.DB_NAME || "";
 
-export async function GET(req: Request, context: { params: { slug: string } }) {
-  const { slug } = context.params;
-
+export async function GET(req: NextRequest, context: any) {
+  const slug = context.params.slug as string;
   let client;
 
   try {

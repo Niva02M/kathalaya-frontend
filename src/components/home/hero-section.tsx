@@ -38,7 +38,7 @@ export default function HeroSection() {
   if (!story) return null;
 
   return (
-    <section className='relative min-h-screen flex items-center z-0'>
+    <section className=' min-h-screen flex items-center z-0'>
       <div className='absolute inset-0 z-0'>
         <div className='absolute inset-0 z-[-1]'>
           <Image
@@ -53,7 +53,7 @@ export default function HeroSection() {
         </div>
       </div>
 
-      <div className='relative z-10 max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mt-24'>
+      <div className='relative z-10 max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center '>
         <div className='space-y-8'>
           <div>
             <h1 className='text-5xl lg:text-7xl font-bold mb-4 leading-tight'>{story.title}</h1>

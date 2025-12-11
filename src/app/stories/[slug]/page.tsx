@@ -1,7 +1,7 @@
 import StoryDetail from "@/components/stories/StoryDetail";
 
 interface StoryPageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 async function getStory(slug: string) {
@@ -11,7 +11,7 @@ async function getStory(slug: string) {
 }
 
 export default async function StoryPage({ params }: StoryPageProps) {
-  const slug = params?.slug;
+  const { slug } = await params;
 
   if (!slug) {
     return <div className='text-white p-8'>Invalid story slug</div>;
