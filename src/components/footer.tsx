@@ -4,7 +4,6 @@ import Image from "next/legacy/image";
 export function Footer() {
   return (
     <footer className='relative bg-black py-6 text-gray-400'>
-      {/* Background image */}
       <div className='absolute inset-0 z-0 opacity-60'>
         <Image
           src={bookstore}
@@ -17,9 +16,7 @@ export function Footer() {
         />
       </div>
       <div className='absolute inset-0 bg-gradient-to-t from-transparent via-black/70 to-black'></div>
-      {/* Content */}
       <div className='relative z-10 max-w-7xl mx-auto px-6'>
-        {/* Name & Description */}
         <div className='text-center mb-8 space-y-4'>
           <h2 className='text-2xl font-bold text-white'>KATHA/LAYA</h2>
           <p className='max-w-xl mx-auto'>
@@ -43,7 +40,6 @@ export function Footer() {
           </a>
         </div> */}
 
-        {/* Copyright */}
         <div className='border-t border-gray-800 pt-4 text-center text-sm'>
           {/* <div className='flex gap-6 mb-4 flex-wrap justify-center'>
             <a href='#' className='hover:text-white transition-colors'>
@@ -59,7 +55,7 @@ export function Footer() {
               Terms of Use
             </a>
           </div> */}
-          <p className='mb-2'>© 2025 Kathalaya. All rights reserved.</p>
+          <p className='mb-2'>© 2025 Katha/laya. All rights reserved.</p>
           <p>
             Developed by{" "}
             <a

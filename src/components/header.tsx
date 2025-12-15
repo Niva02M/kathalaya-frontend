@@ -40,7 +40,7 @@ export function Header() {
         onMouseLeave={() => setIsHovering(false)}
       />
       <header
-        className={`fixed top-0 left-0 right-0 z-[100] border-b transition-all duration-300 ease-in-out ${
+        className={`fixed top-0 left-0 right-0 z-[100] border-b transition-all duration-300 ease-in-out max-w-7xl mx-auto ${
           shouldShowHeader ? "translate-y-0" : "-translate-y-full"
         } ${
           scrollY > 50
@@ -50,7 +50,7 @@ export function Header() {
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
       >
-        <div className='max-w-7xl mx-auto px-6 py-4'>
+        <div className='py-4'>
           <div className='flex items-center justify-between'>
             <div className='flex items-center space-x-8'>
               <Link href='/' className='text-2xl font-bold text-white'>
@@ -101,7 +101,7 @@ export function Header() {
           </div>
 
           {hasMounted && (
-            <div className='absolute right-6 top-20 z-50'>
+            <div className='absolute right-0 top-20 z-50 '>
               <div
                 className={`transition-all duration-300 ease-in-out transform ${
                   isSearchOpen ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"

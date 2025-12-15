@@ -4,9 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Play, Info } from "lucide-react";
 import Image from "next/legacy/image";
 import bookstore from "@/public/assets/bookstore.jpg";
-import { useEffect, useState } from "react";
 
-interface Story {
+export interface Story {
   _id: string;
   title: string;
   authorName: string;
@@ -14,31 +13,15 @@ interface Story {
   slug: string;
   chapters?: any[];
 }
+interface HeroSectionProps {
+  story: Story;
+}
 
-export default function HeroSection() {
-  const [story, setStory] = useState<Story | null>(null);
-
-  useEffect(() => {
-    async function fetchStory() {
-      try {
-        const res = await fetch("/api/stories");
-        const data = await res.json();
-        if (data.success && Array.isArray(data.stories)) {
-          const targetStory = data.stories.find((s: Story) => s._id === "693956ac719ac1331a7810c7");
-          if (targetStory) setStory(targetStory);
-        }
-      } catch (err) {
-        console.error("Failed to fetch story", err);
-      }
-    }
-
-    fetchStory();
-  }, []);
-
+export default function HeroSection({ story }: HeroSectionProps) {
   if (!story) return null;
 
   return (
-    <section className=' min-h-screen flex items-center z-0'>
+    <section className='min-h-screen flex items-center z-0'>
       <div className='absolute inset-0 z-0'>
         <div className='absolute inset-0 z-[-1]'>
           <Image
@@ -89,9 +72,9 @@ export default function HeroSection() {
         <div className='flex justify-center lg:justify-end'>
           <div className='relative text-center'>
             <div className='w-80 h-96 bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-2xl overflow-hidden relative'>
-              {story.coverUrl ? (
+              {story.coverUrl && (
                 <Image src={story.coverUrl} alt={story.title} layout='fill' objectFit='cover' />
-              ) : null}
+              )}
             </div>
             <p className='text-sm text-gray-200 mt-4'>Featured Book</p>
           </div>
