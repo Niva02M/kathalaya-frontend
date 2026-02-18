@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const TABS = ["Your Stories", "Reading List", "Followers"];
 
@@ -133,21 +134,24 @@ export default function UserProfilePage() {
 
   if (!mounted || !user) {
     return (
-      <div className='min-h-screen py-40 px-8 bg-black text-white'>
+      <div className='min-h-screen py-24 sm:py-32 px-4 sm:px-8 bg-black text-white'>
         <div className='p-6 text-white'>Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className='min-h-screen py-40 px-8 bg-black text-white'>
-      <div className='max-w-6xl mx-auto flex gap-8'>
-        <div className='w-1/3 p-6 rounded-lg shadow-lg space-y-6'>
+    <div className='min-h-screen py-24 sm:py-32 px-4 sm:px-8 bg-black text-white'>
+      <div className='max-w-6xl mx-auto flex flex-col lg:flex-row gap-6 lg:gap-8'>
+        <div className='w-full lg:w-1/3 p-4 sm:p-6 rounded-lg shadow-lg space-y-6 border border-gray-800'>
           <div className='flex flex-col items-center gap-4'>
-            <img
+            <Image
               src={user.avatar || "/default-avatar.png"}
               className='w-24 h-24 rounded-full object-cover border border-gray-500'
               alt='Avatar'
+              width={96}
+              height={96}
+              unoptimized
             />
 
             <label className='bg-white text-black text-sm px-4 py-1 rounded cursor-pointer hover:bg-black hover:text-white transition'>
@@ -203,13 +207,13 @@ export default function UserProfilePage() {
           </div>
         </div>
 
-        <div className='w-2/3'>
-          <div className='flex space-x-4 border-b border-gray-700 mb-6'>
+        <div className='w-full lg:w-2/3'>
+          <div className='flex gap-2 sm:gap-4 border-b border-gray-700 mb-6 overflow-x-auto scrollbar-hide'>
             {TABS.map((tab) => (
               <button
                 key={tab}
                 className={clsx(
-                  "px-4 py-2 font-semibold transition-colors",
+                  "px-3 sm:px-4 py-2 font-semibold transition-colors whitespace-nowrap",
                   activeTab === tab
                     ? "border-b-2 border-yellow-400 text-yellow-400"
                     : "text-gray-400 hover:text-white"
@@ -244,17 +248,19 @@ export default function UserProfilePage() {
                         className='bg-gray-800/40 rounded-lg p-4 border border-gray-700 hover:border-yellow-400 transition cursor-pointer'
                         onClick={() => router.push(`/stories/${story.slug}`)}
                       >
-                        <div className='flex gap-4'>
+                        <div className='flex flex-col sm:flex-row gap-4'>
                           {story.coverUrl && (
-                            <img
+                            <Image
                               src={story.coverUrl}
                               alt={story.title}
                               className='w-24 h-24 object-cover rounded'
+                              width={96}
+                              height={96}
                             />
                           )}
                           <div className='flex-1'>
                             <h3 className='text-xl font-semibold text-white mb-2'>{story.title}</h3>
-                            <div className='flex items-center gap-4 text-sm text-gray-400'>
+                            <div className='flex flex-wrap items-center gap-2 sm:gap-4 text-sm text-gray-400'>
                               <span>{story.chapters?.length || 0} chapters</span>
                               <span>•</span>
                               <span>{new Date(story.createdAt).toLocaleDateString()}</span>
@@ -265,13 +271,13 @@ export default function UserProfilePage() {
                               </div>
                             )}
                           </div>{" "}
-                          <div className='flex items-center'>
+                          <div className='flex items-center sm:items-start'>
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
                                 console.log("Update story:", story._id);
                               }}
-                              className='bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-2 px-4 rounded transition'
+                              className='w-full sm:w-auto bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-2 px-4 rounded transition'
                             >
                               Update
                             </button>
@@ -297,7 +303,7 @@ export default function UserProfilePage() {
         </div>
       </div>
       {showLogoutModal && (
-        <div className='fixed inset-0 bg-black/50 flex items-center justify-center z-50'>
+        <div className='fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4'>
           <div className='bg-black/80 rounded-lg p-6 max-w-sm w-full text-white shadow-lg'>
             <h2 className='text-lg font-semibold mb-4'>Confirm Logout</h2>
             <p className='mb-6'>Do you want to logout?</p>

@@ -5,6 +5,7 @@ import { useMemo } from "react";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { BookOpen } from "lucide-react";
+import Image from "next/image";
 
 export interface Story {
   _id: string;
@@ -19,9 +20,10 @@ export interface Story {
 interface StoriesGridProps {
   stories: Story[];
   loading: boolean;
+  compact?: boolean;
 }
 
-export default function StoriesGrid({ stories, loading }: StoriesGridProps) {
+export default function StoriesGrid({ stories, loading, compact = false }: StoriesGridProps) {
   const searchParams = useSearchParams();
   const tagParam = searchParams.get("tag") || "all";
 
@@ -40,7 +42,7 @@ export default function StoriesGrid({ stories, loading }: StoriesGridProps) {
     selectedCategory.toLowerCase() === "all"
       ? stories
       : stories.filter((story) =>
-          story.tags?.some((t) => t.toLowerCase() === selectedCategory.toLowerCase())
+          story.tags?.some((t) => t.toLowerCase() === selectedCategory.toLowerCase()),
         );
 
   if (loading) return <div className='text-gray-400 text-center py-12'>Loading stories...</div>;
@@ -48,9 +50,10 @@ export default function StoriesGrid({ stories, loading }: StoriesGridProps) {
     return <div className='text-gray-400 text-center py-12'>No stories found</div>;
 
   return (
-    <section className='py-16 px-6 max-w-7xl mx-auto'>
-      {/* Category Tabs */}
-      <div className='flex space-x-6 mb-8 overflow-x-auto pb-2'>
+    <section
+      className={`${compact ? "py-0 px-0" : "py-10 sm:py-16 px-4 sm:px-6"} max-w-7xl mx-auto`}
+    >
+      <div className='flex gap-4 sm:gap-6 mb-6 sm:mb-8 overflow-x-auto md:flex-wrap scrollbar-hide pb-2'>
         {categories.map((category) => (
           <Link
             key={category}
@@ -66,17 +69,19 @@ export default function StoriesGrid({ stories, loading }: StoriesGridProps) {
         ))}
       </div>
 
-      <div className='grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6'>
+      <div className='grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-6'>
         {filteredStories.map((story) => (
           <Link key={story._id} href={`/stories/${story.slug}`}>
-            <Card className='relativerounded-xl overflow-hidden shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 cursor-pointer group bg-transparent border-0'>
+            <Card className='relative rounded-xl overflow-hidden shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 cursor-pointer group bg-transparent border-0'>
               <CardContent className='p-0'>
-                <div className='w-full h-70 relative'>
+                <div className='w-full h-[230px] sm:h-[280px] md:h-[320px] relative'>
                   {story.coverUrl ? (
-                    <img
+                    <Image
                       src={story.coverUrl}
                       alt={story.title}
-                      className='w-full h-full object-cover rounded-xl'
+                      fill
+                      sizes='(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 16vw'
+                      className='object-cover rounded-xl'
                     />
                   ) : (
                     <div className='w-full h-48 flex items-center justify-center bg-gray-700 rounded-lg'>

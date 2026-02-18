@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BookOpen, ArrowLeft, ChevronRight } from "lucide-react";
+import Image from "next/image";
 
 interface Chapter {
   chapterNumber: number;
@@ -38,11 +39,19 @@ export default function StoryDetail({ story }: { story: Story }) {
         <Card className='bg-black border border-gray-800'>
           <CardContent className='p-0'>
             <div className='w-full h-96 relative'>
-              <img
-                src={story.coverUrl}
-                alt={story.title}
-                className='object-contain w-full h-full'
-              />
+              {story.coverUrl ? (
+                <Image
+                  src={story.coverUrl}
+                  alt={story.title}
+                  fill
+                  sizes='(max-width: 1024px) 100vw, 960px'
+                  className='object-contain'
+                />
+              ) : (
+                <div className='w-full h-full flex items-center justify-center bg-gray-700'>
+                  <BookOpen className='h-12 w-12 text-gray-400' />
+                </div>
+              )}
             </div>
 
             <div className='p-6'>

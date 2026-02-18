@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Image as ImageIcon, Plus } from "lucide-react";
 import toast from "react-hot-toast";
+import Image from "next/image";
 
 export default function CreateStoryPage() {
   const [user, setUser] = useState<any>(null);
@@ -88,8 +89,9 @@ export default function CreateStoryPage() {
   };
 
   return (
-    <div className='min-h-screen text-white p-36 max-w-5xl mx-auto'>
-      <h1 className='text-4xl font-bold mb-8 text-yellow-400'>Create a New Story</h1>
+    <div className='min-h-screen text-white py-24 sm:py-32 px-4 sm:px-6'>
+      <div className='max-w-5xl mx-auto'>
+        <h1 className='text-3xl sm:text-4xl font-bold mb-8 text-yellow-400'>Create a New Story</h1>
       <form onSubmit={handleSubmit} className='flex flex-col gap-6'>
         <input
           type='text'
@@ -111,11 +113,16 @@ export default function CreateStoryPage() {
             className='p-2 rounded-lg bg-gray-800 text-white'
           />
           {coverUrl && (
-            <img
-              src={coverUrl}
-              alt='Cover Preview'
-              className='mt-2 w-48 h-64 object-cover rounded-lg'
-            />
+            <div className='mt-2'>
+              <Image
+                src={coverUrl}
+                alt='Cover Preview'
+                width={192}
+                height={256}
+                unoptimized
+                className='w-36 h-52 sm:w-48 sm:h-64 object-cover rounded-lg'
+              />
+            </div>
           )}
         </div>
 
@@ -129,7 +136,7 @@ export default function CreateStoryPage() {
 
         <div className='space-y-4'>
           {chapters.map((ch, idx) => (
-            <div key={idx} className='flex flex-col gap-2 p-4 bg-gray-900 rounded-xl'>
+            <div key={idx} className='flex flex-col gap-2 p-3 sm:p-4 bg-gray-900 rounded-xl'>
               <h2 className='text-yellow-400 font-semibold'>Chapter {ch.chapterNumber}</h2>
               <input
                 type='text'
@@ -153,7 +160,7 @@ export default function CreateStoryPage() {
           <Button
             type='button'
             onClick={handleAddChapter}
-            className='flex items-center gap-2 bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-full'
+            className='w-full sm:w-auto flex items-center justify-center gap-2 bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-full'
           >
             <Plus className='h-4 w-4' /> Add Chapter
           </Button>
@@ -161,11 +168,12 @@ export default function CreateStoryPage() {
 
         <Button
           type='submit'
-          className='bg-yellow-400 hover:bg-yellow-500 text-black px-8 py-3 rounded-full font-semibold'
+          className='w-full sm:w-auto bg-yellow-400 hover:bg-yellow-500 text-black px-8 py-3 rounded-full font-semibold'
         >
           Create Story
         </Button>
       </form>
+      </div>
     </div>
   );
 }
