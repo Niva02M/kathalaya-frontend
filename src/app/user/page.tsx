@@ -106,7 +106,8 @@ export default function UserProfilePage() {
     let data;
     try {
       data = await res.json();
-    } catch (err) {
+    } catch (error) {
+      console.error("Avatar response parse error:", error);
       toast.error("Failed to parse server response.");
       return;
     }
@@ -130,6 +131,36 @@ export default function UserProfilePage() {
     localStorage.removeItem("user");
     toast.success("Logged out successfully");
     router.push("/");
+  };
+
+  const handleDeleteStory = async (slug: string) => {
+    if (!user?.email) {
+      toast.error("Please log in first");
+      return;
+    }
+
+    const confirmed = window.confirm("Delete this story permanently?");
+    if (!confirmed) return;
+
+    try {
+      const res = await fetch(`/api/stories/${slug}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ editorEmail: user.email }),
+      });
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        toast.error(data.error || "Failed to delete story");
+        return;
+      }
+
+      toast.success("Story deleted");
+      fetchUserStories();
+    } catch (error) {
+      console.error("Error deleting story:", error);
+      toast.error("Failed to delete story");
+    }
   };
 
   if (!mounted || !user) {
@@ -216,7 +247,7 @@ export default function UserProfilePage() {
                   "px-3 sm:px-4 py-2 font-semibold transition-colors whitespace-nowrap",
                   activeTab === tab
                     ? "border-b-2 border-yellow-400 text-yellow-400"
-                    : "text-gray-400 hover:text-white"
+                    : "text-gray-400 hover:text-white",
                 )}
                 onClick={() => setActiveTab(tab)}
               >
@@ -244,7 +275,7 @@ export default function UserProfilePage() {
                   <div className='grid grid-cols-1 gap-4'>
                     {stories.map((story) => (
                       <div
-                        key={story.id}
+                        key={story._id}
                         className='bg-gray-800/40 rounded-lg p-4 border border-gray-700 hover:border-yellow-400 transition cursor-pointer'
                         onClick={() => router.push(`/stories/${story.slug}`)}
                       >
@@ -272,15 +303,26 @@ export default function UserProfilePage() {
                             )}
                           </div>{" "}
                           <div className='flex items-center sm:items-start'>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                console.log("Update story:", story._id);
-                              }}
-                              className='w-full sm:w-auto bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-2 px-4 rounded transition'
-                            >
-                              Update
-                            </button>
+                            <div className='flex flex-col sm:flex-row gap-2 w-full'>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  router.push(`/stories/${story.slug}/edit`);
+                                }}
+                                className='w-full sm:w-auto bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-2 px-4 rounded transition'
+                              >
+                                Update
+                              </button>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleDeleteStory(story.slug);
+                                }}
+                                className='w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded transition'
+                              >
+                                Delete
+                              </button>
+                            </div>
                           </div>
                         </div>
                       </div>
